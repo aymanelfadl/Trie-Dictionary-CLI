@@ -8,6 +8,8 @@
 #include <sstream>
 #include <cctype>
 #include <fstream>
+#include <ostream>
+#include <unordered_map>
 
 class Trie {
 private:
@@ -25,9 +27,12 @@ private:
     const Node* walk(const std::string& s) const;
     Node* walkCreate(const std::string& s);
 
-    void dfsCollect(const Node* node, std::string& current, std::vector<std::string>& out, size_t limit) const;
+    void dfsCollect(const Node* node, std::string& current,
+                    std::vector<std::string>& out, size_t limit) const;
 
     void dfsCount(const Node* node, int& count) const;
+
+    void exportNodeDot(const Node* node, std::ostream& out, std::unordered_map<const Node*, int>& ids, int& nextId) const;
 
 public:
     Trie();
@@ -39,4 +44,6 @@ public:
     int countPrefix(const std::string& prefix) const;
 
     bool loadFromFile(const std::string& filepath);
+
+    void exportDot(const std::string& filename) const;
 };

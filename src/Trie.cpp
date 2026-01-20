@@ -1,5 +1,6 @@
 #include "Trie.hpp"
 
+#define END_FLAG isWord
 
 Trie::Trie() : root(std::make_unique<Node>()) {}
 
@@ -168,21 +169,73 @@ bool Trie::loadFromFile(const std::string& filepath) {
     return true;
 }
 
-// // debuging 
 
-// void Trie::display() const {
-//     displayNode(root.get(), 0);
-// }
+void Trie::exportNodeDot(const Node* node,
+                         std::ostream& out,
+                         std::unordered_map<const Node*, int>& ids,
+                         int& nextId) const
+{
+    if (!node) return;
 
-// void Trie::displayNode(const Node* node, int depth) const {
-//     for (int i = 0; i < 26; ++i) {
-//         if (node->child[i]) {
-//             for (int d = 0; d < depth; ++d) std::cout << "  ";
-//             char letter = static_cast<char>('a' + i);
-//             std::cout << letter;
-//             if (node->child[i]->isWord) std::cout << "*";
-//             std::cout << "\n";
-//             displayNode(node->child[i].get(), depth + 1);
-//         }
-//     }
-// }
+    auto it = ids.find(node);
+    if (it == ids.end()) {
+        ids[node] = nextId++;
+    }
+    int myId = ids[node];
+
+    out << "  n" << myId
+        << " [shape=" << (node->END_FLAG ? "doublecircle" : "circle")
+        << ",label=\"\"];\n";
+
+    for (int i = 0; i < 26; i++) {
+        if (node->child[i]) {
+            const Node* ch = node->child[i].get();
+
+            if (!ids.count(ch)) ids[ch] = nextId++;
+            int chId = ids[ch];
+
+            char letter = char('a' + i);
+
+            out << "  n" << myId << " -> n" << chId
+                << " [label=\"" << letter << "\"];\n";
+
+            exportNodeDot(ch, out, ids, nextId);
+        }
+    }
+}
+
+void Trie::exportDot(const std::string& filename) const {
+    std::ofstream out(filename);
+    if (!out) return;
+
+    out << "digraph Trie {\n";
+    out << "  rankdir=LR;\n";
+    out << "  splines=true;\n";
+    out << "  bgcolor=\"white\";\n";
+    out << "  nodesep=0.35;\n";
+    out << "  ranksep=0.60;\n\n";
+
+    out << "  node [\n";
+    out << "    shape=circle,\n";
+    out << "    style=filled,\n";
+    out << "    fillcolor=\"#E3F2FD\",\n";
+    out << "    color=\"#1565C0\",\n";
+    out << "    fontname=\"Arial\",\n";
+    out << "    fontsize=11,\n";
+    out << "    margin=\"0.08\"\n";
+    out << "  ];\n\n";
+    out << "  edge [\n";
+    out << "    color=\"#555555\",\n";
+    out << "    fontname=\"Arial\",\n";
+    out << "    fontsize=11,\n";
+    out << "    arrowsize=0.7\n";
+    out << "  ];\n\n";
+    out << "  n0 [shape=box, fillcolor=\"#FFF9C4\", color=\"#F9A825\", label=\"ROOT\"];\n\n";
+
+    std::unordered_map<const Node*, int> ids;
+    int nextId = 0;
+
+    exportNodeDot(root.get(), out, ids, nextId);
+
+    out << "}\n";
+}

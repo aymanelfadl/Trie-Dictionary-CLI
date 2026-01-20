@@ -22,6 +22,11 @@ void TrieCLI::run() {
         else if (cmd == "search") handleSearch(iss);
         else if (cmd == "suggest") handleSuggest(iss);
         else if (cmd == "count") handleCount(iss);
+        else if (cmd == "export")
+        {
+                trie.exportDot("trie.dot");
+                std::cout << "Generated trie.dot\n";
+        }
         else std::cout << "Unknown command. Type 'help'.\n";
     }
 

@@ -1,0 +1,50 @@
+digraph Trie {
+  rankdir=LR;
+  splines=true;
+  bgcolor="white";
+  nodesep=0.35;
+  ranksep=0.60;
+
+  node [
+    shape=circle,
+    style=filled,
+    fillcolor="#E3F2FD",
+    color="#1565C0",
+    fontname="Arial",
+    fontsize=11,
+    margin="0.08"
+  ];
+
+  edge [
+    color="#555555",
+    fontname="Arial",
+    fontsize=11,
+    arrowsize=0.7
+  ];
+
+  n0 [shape=box, fillcolor="#FFF9C4", color="#F9A825", label="ROOT"];
+
+  n0 [shape=circle,label=""];
+  n0 -> n1 [label="c"];
+  n1 [shape=circle,label=""];
+  n1 -> n2 [label="a"];
+  n2 [shape=circle,label=""];
+  n2 -> n3 [label="r"];
+  n3 [shape=doublecircle,label=""];
+  n3 -> n4 [label="e"];
+  n4 [shape=doublecircle,label=""];
+  n2 -> n5 [label="t"];
+  n5 [shape=doublecircle,label=""];
+  n0 -> n6 [label="d"];
+  n6 [shape=circle,label=""];
+  n6 -> n7 [label="o"];
+  n7 [shape=circle,label=""];
+  n7 -> n8 [label="g"];
+  n8 [shape=doublecircle,label=""];
+  n7 -> n9 [label="o"];
+  n9 [shape=circle,label=""];
+  n9 -> n10 [label="r"];
+  n10 [shape=doublecircle,label=""];
+  n7 -> n11 [label="t"];
+  n11 [shape=doublecircle,label=""];
+}
